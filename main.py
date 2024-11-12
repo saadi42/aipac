@@ -31,11 +31,9 @@ def main():
         "api_key": os.environ["FEC_API_KEY"],
         "committee_id": [AIPAC_COMMITTEE_ID],
         "sort": f"{LAST_DATE}",
-        "per_page": 2,
-        "min_date":"2023-10-07",
-        "max_date":"2023-10-07",
-        "min_amount": 50,
-        "max_amount": 50
+        "per_page": MAX_RESULTS_PER_PAGE,
+        "min_date":"2023-10-01",
+        "max_date":"2023-11-01"
     }
 
     checkpoint = extractor._get_last_indexes(AIPAC_DATASET, SCHEDULE_A_TABLE, LAST_DATE)
