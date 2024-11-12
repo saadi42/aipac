@@ -79,10 +79,8 @@ class Extractor:
             } 
             for nl in resp_results]
 
-        job = self.bq_client._insert_data(json_rows, dataset_id, table_id)
-
-        logger.info(f"Loaded {job.output_rows} rows into {dataset_id}:{table_id}")
-
+        return self.bq_client._insert_data(json_rows, dataset_id, table_id)
+        
     def _get_last_indexes(
         self,
         dataset_id: str,

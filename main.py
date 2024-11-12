@@ -50,7 +50,8 @@ def main():
             logger.info(f"""Total pages: {response["pagination"]["pages"]}""")
 
         if len(response["results"]) != 0:
-            extractor._upload_schedule_response(response, AIPAC_DATASET, SCHEDULE_A_TABLE)
+            job = extractor._upload_schedule_response(response, AIPAC_DATASET, SCHEDULE_A_TABLE)
+            logger.info(f"Loaded {job.output_rows} rows into {AIPAC_DATASET}:{SCHEDULE_A_TABLE}. Api call count: {extractor.api_call_count}")
             
         last_indexes = response["pagination"]["last_indexes"]
         if last_indexes is None:
