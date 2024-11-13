@@ -43,13 +43,13 @@ class Constants:
   DATA_CONFIG = {
       "receipts": {
           "endpoint": "schedules/schedule_a",
-          "bq_table": "temp_a",
+          "bq_table": "schedule_a",
           "last_date": "contribution_receipt_date",
           "last_indexes": ["last_index", "last_contribution_receipt_date"]
       },
       "disbursements": {
           "endpoint": "schedules/schedule_b",
-          "bq_table": "temp_b",
+          "bq_table": "schedule_b",
           "last_date": "disbursement_date",
           "last_indexes": ["last_index", "last_disbursement_date"]
       }
