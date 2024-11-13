@@ -166,12 +166,7 @@ class Extractor:
             "api_key": self.ct.API_KEY,
             "committee_id": [self.ct.AIPAC_COMMITTEE_ID],
             "sort": f"{last_date}",
-            # "per_page": self.ct.API_MAX_RESULTS_PER_PAGE,
-            "per_page": 5,
-            "min_date": "2024-08-29",
-            "max_date": "2024-08-29",
-            "min_amount": 5000,
-            "max_amount": 5000
+            "per_page": self.ct.API_MAX_RESULTS_PER_PAGE
         }
 
         checkpoint = self._get_last_indexes(bq_dataset, bq_table, last_date)

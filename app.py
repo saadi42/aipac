@@ -1,5 +1,4 @@
 import logging
-import argparse
 from flask import Flask, request, jsonify
 from aipac.extract import Extractor
 from config.logger import setup_logger
