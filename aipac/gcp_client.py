@@ -19,7 +19,6 @@ class BigqueryClient:
         )
     
         job.result()
-    
         return job
 
     def _fetch_data(self, query):

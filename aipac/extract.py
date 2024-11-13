@@ -1,10 +1,10 @@
 import json
 import logging
-from datetime import datetime, timezone
-from typing import Any, Dict, List
-from aipac.gcp_client import BigqueryClient
-
 import requests
+from typing import Any, Dict, List
+from datetime import datetime, timezone
+
+from aipac.gcp_client import BigqueryClient
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
