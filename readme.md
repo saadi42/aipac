@@ -2,7 +2,7 @@
 
 This project fetches AIPAC receipts and disbursements data using [FEC API](https://api.open.fec.gov/developers/#/) and pushes to Bigquery.
 
-# PRE-REQUISITES
+## PRE-REQUISITES
 
 * set env variable `FEC_API_KEY` by signing up on [FEC API site](https://api.open.fec.gov/developers/#/).
 
@@ -28,7 +28,7 @@ This project fetches AIPAC receipts and disbursements data using [FEC API](https
 ]
 ```
 
-# HOW DOES IT WORK
+## HOW DOES IT WORK
 
 In terminal start the app
 ```
