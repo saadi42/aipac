@@ -8,18 +8,13 @@ from aipac.gcp_client import BigqueryClient
 from aipac.constants import Constants
 
 logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
-
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter("%(asctime)s — %(name)s — %(levelname)s — %(funcName)s:%(lineno)d — %(message)s")
-handler.setFormatter(formatter)
-logger.addHandler(handler)
-
 
 class Extractor:
 
     def __init__(self):
+        """
+        Initialize the Extractor with BigQuery client and constants.
+        """
         self.bq_client = BigqueryClient()
         self.ct = Constants()
 
@@ -36,9 +31,10 @@ class Extractor:
 
         Args:
             endpoint (str): API endpoint for Schedule A or B.
-            params (ScheduleAParameters | ScheduleBParameters): Parameters to send with the API request.
+            params (Dict[str, Any]): Parameters to send with the API request.
+
         Returns:
-           List[Dict[Any, Any]]: Parsed response schema containing results and pagination info.
+            Dict[str, Any]: Parsed response containing results and pagination info.
 
         Raises:
             requests.HTTPError: If the request fails or the response status is not 200.
@@ -67,6 +63,15 @@ class Extractor:
         table_id: str
     ) -> None:
         """
+        Upload the API response to a BigQuery table.
+
+        Args:
+            response (Dict[str, Any]): The response data to upload.
+            dataset_id (str): The BigQuery dataset ID.
+            table_id (str): The BigQuery table ID.
+
+        Returns:
+            Any: The job result from BigQuery insert.
         """
         _now = datetime.now(timezone.utc)
 
@@ -88,6 +93,17 @@ class Extractor:
         table_id: str,
         last_date: str
     ) -> Dict[str, Any]:
+        """
+        Fetch the last processed index and date from BigQuery table.
+
+        Args:
+            dataset_id (str): The BigQuery dataset ID.
+            table_id (str): The BigQuery table ID.
+            last_date (str): The column name of the last date field to retrieve.
+
+        Returns:
+            Dict[str, Any]: Dictionary with last index and last date.
+        """        
         # This table is manually created in Bigquery
         # The query should return one row
         query = f"""
@@ -103,12 +119,32 @@ class Extractor:
         if rows:
             return [dict(row) for row in rows][0]
 
-    def _update_api_params(self, src: Dict[str, Any], params: Dict[str, Any], keys: List) -> None:
+    def _update_api_params(
+        self,
+        src: Dict[str, Any],
+        params: Dict[str, Any],
+        keys: List
+    ) -> None:
+        """
+        Update parameters with values from a source dictionary for specified keys.
+
+        Args:
+            src (Dict[str, Any]): Source dictionary with parameter values.
+            params (Dict[str, Any]): The dictionary to be updated.
+            keys (List[str]): Keys to be updated in the params dictionary.
+        """
         for _ in keys:
             params[_] = src[_]
 
     def _extract_all(self, data_type: str) -> None:
-        """Fetch data from FEC API
+        """
+        Extract data from the FEC API and upload to BigQuery.
+
+        Args:
+            data_type (str): The data type to extract, either "receipts" or "disbursements".
+
+        Raises:
+            ValueError: If an invalid data type is provided.
         """
         bq_dataset = self.ct.AIPAC_BQ_DATASET
         try:
@@ -137,7 +173,7 @@ class Extractor:
             "min_amount": 5000,
             "max_amount": 5000
         }
-        logger.info(params)
+
         checkpoint = self._get_last_indexes(bq_dataset, bq_table, last_date)
         if checkpoint:
             logger.info(f"getting last_index from bigquery table {bq_table} as \n: {checkpoint}")
@@ -149,7 +185,7 @@ class Extractor:
             _rslt = response["results"]
 
             if (self.api_call_count == 1):
-                logger.info(f"""Total results: {_pgn["count"]} \n Total pages: {_pgn["pages"]}""")
+                logger.info(f"""Total results: {_pgn["count"]} | Total pages: {_pgn["pages"]}""")
 
             if len(_rslt) != 0:
                 job = self._upload_schedule_response(response, bq_dataset, bq_table)
