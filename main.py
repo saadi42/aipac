@@ -13,7 +13,7 @@ logger.addHandler(handler)
 def main():
     extractor = Extractor()
 
-    extractor._extract_all("receipts")
+    # extractor._extract_all("receipts")
     extractor._extract_all("disbursements")
 
 if __name__ == "__main__":

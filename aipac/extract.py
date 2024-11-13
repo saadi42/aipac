@@ -131,13 +131,13 @@ class Extractor:
             "committee_id": [self.ct.AIPAC_COMMITTEE_ID],
             "sort": f"{last_date}",
             # "per_page": self.ct.API_MAX_RESULTS_PER_PAGE,
-            "per_page": 1,
-            "min_date": "2023-10-07",
-            "max_date": "2023-10-07",
-            "min_amount": 50,
-            "max_amount": 50
+            "per_page": 5,
+            "min_date": "2024-08-29",
+            "max_date": "2024-08-29",
+            "min_amount": 5000,
+            "max_amount": 5000
         }
-
+        logger.info(params)
         checkpoint = self._get_last_indexes(bq_dataset, bq_table, last_date)
         if checkpoint:
             logger.info(f"getting last_index from bigquery table {bq_table} as \n: {checkpoint}")
@@ -147,6 +147,7 @@ class Extractor:
             response = self._get_schedule_response(endpoint=endpoint, params=params)
             _pgn = response["pagination"]
             _rslt = response["results"]
+
             if (self.api_call_count == 1):
                 logger.info(f"""Total results: {_pgn["count"]} \n Total pages: {_pgn["pages"]}""")
 
