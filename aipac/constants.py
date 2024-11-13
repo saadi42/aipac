@@ -1,5 +1,4 @@
 import os
-from typing import Any
 
 
 class Constants:
@@ -9,18 +8,19 @@ class Constants:
   API_MAX_RESULTS_PER_PAGE = 100
   AIPAC_COMMITTEE_ID = "C00797670"
   AIPAC_BQ_DATASET = "aipac"
-  RECEIPTS_ENDPOINT = "schedules/schedule_a"
-  RECEIPTS_BQ_TABLE = "temp"
-  RECEIPTS_LAST_DATE = "contribution_receipt_date"
-
-
-class ConstantsManager:
-  def __init__(self):
-    for cls in [Constants]:
-      for key, value in cls.__dict__.items():
-        if not key.startswith("__"):
-          self.__dict__.update(**{key: value})
-
-    
-  def __setattr__(self, name: str, value: Any) -> None:
-    raise TypeError("Constants are immutable")
+  
+  # Nested dictionaries for each data type
+  DATA_CONFIG = {
+      "receipts": {
+          "endpoint": "schedules/schedule_a",
+          "bq_table": "temp_a",
+          "last_date": "contribution_receipt_date",
+          "last_indexes": ["last_index", "last_contribution_receipt_date"]
+      },
+      "disbursements": {
+          "endpoint": "schedules/schedule_b",
+          "bq_table": "temp_b",
+          "last_date": "disbursement_date",
+          "last_indexes": ["last_index", "last_disbursement_date"]
+      }
+  }
